@@ -18,6 +18,12 @@ void printBoard(char board[3][3]) {
     }
 }
 
+bool isValidMove(char board[3][3], int move){
+    int row = (move - 1) / 3;
+    int col = (move - 1) % 3;
+    return move >= 1 && move <= 9 && board[row][col] != 'X' && board[row][col] != 'O';
+}
+
 int main() {
     char board[3][3] = {{'1', '2', '3'}, {'4', '5', '6'}, {'7', '8', '9'}};
     char currentPlayer;
