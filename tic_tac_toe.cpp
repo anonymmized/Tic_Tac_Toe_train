@@ -24,6 +24,40 @@ bool isValidMove(char board[3][3], int move){
     return move >= 1 && move <= 9 && board[row][col] != 'X' && board[row][col] != 'O';
 }
 
+char checkWinner(char board[3][3]) {
+    for (int i = 0; i < 3; i++) {
+        if (board[i][0] == board[i][1] && board[i][1] == board[i][2]) {
+            return board[i][0];
+        }
+    }
+
+    for (int i = 0; i < 3; i++) {
+        if (board[0][i] == board[1][i] && board[1][i] == board[2][i]){
+            return board[0][i];
+        }
+    }
+
+    if (board[0][0] == board[1][1] && board[1][1] == board[2][2]) {
+        return board[0][0];
+    }
+    
+    if (board[0][2] == board[1][1] && board[1][1] == board[2][0]) {
+        return board[0][2];
+    }
+
+    bool full = true;
+    for (int i = 0; i < 3; i++) {
+        for (int j = 0; j < 3; j++) {
+            if (board[i][j] != 'X' && board[i][j] != "O") {
+                full = false;
+            }
+        }
+    }
+
+    if (full) return 'D';
+    return ' ';
+}
+
 int main() {
     char board[3][3] = {{'1', '2', '3'}, {'4', '5', '6'}, {'7', '8', '9'}};
     char currentPlayer;
