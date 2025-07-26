@@ -20,7 +20,24 @@ void printBoard(char board[3][3]) {
 
 int main() {
     char board[3][3] = {{'1', '2', '3'}, {'4', '5', '6'}, {'7', '8', '9'}};
+    char currentPlayer;
 
     cout << "\033[35mWelcome to Tic-Tac-Toe!\033[0m" << endl;
-    printBoard(board);
+    cout << "\033[35mPlayers take turns entering a number (1-9) to place X or O.\033[0m" << endl;
+
+    do {
+        cout << "\033[38;5;208mWho starts 'X' or 'O'? \033[0m";
+        cin >> currentPlayer;
+        if (currentPlayer == 'X' || currentPlayer == 'x' || currentPlayer == 'O' || currentPlayer == 'o') {
+            currentPlayer = (currentPlayer == 'x') ? 'X' : (currentPlayer == 'o') ? 'O' : currentPlayer;
+            cout << "\033[32mPlayer " << currentPlayer << " starts!\n" << endl;
+            break;
+        } else {
+            cout << "\033[31mInvalid input! Enter 'X' or 'O'.\033[0m" << endl;
+            cin.clear();
+            cin.ignore(10000, '\n');
+        }
+    } while (true);
+
+    printBoard(board);    
 }
