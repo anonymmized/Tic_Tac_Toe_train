@@ -8,7 +8,7 @@ void printBoard(char board[3][3]) {
         for (int j = 0; j < 3; j++) {
             if (board[i][j] == 'X') {
                 cout << "\033[31m" << board[i][j] << "\033[0m | ";
-            } else if  (board[i][j] == 'O') {
+            } else if (board[i][j] == 'O') {
                 cout << "\033[34m" << board[i][j] << "\033[0m | ";
             } else {
                 cout << board[i][j] << " | ";
@@ -18,7 +18,7 @@ void printBoard(char board[3][3]) {
     }
 }
 
-bool isValidMove(char board[3][3], int move){
+bool isValidMove(char board[3][3], int move) {
     int row = (move - 1) / 3;
     int col = (move - 1) % 3;
     return move >= 1 && move <= 9 && board[row][col] != 'X' && board[row][col] != 'O';
@@ -32,7 +32,7 @@ char checkWinner(char board[3][3]) {
     }
 
     for (int i = 0; i < 3; i++) {
-        if (board[0][i] == board[1][i] && board[1][i] == board[2][i]){
+        if (board[0][i] == board[1][i] && board[1][i] == board[2][i]) {
             return board[0][i];
         }
     }
@@ -59,55 +59,64 @@ char checkWinner(char board[3][3]) {
 }
 
 int main() {
-    char board[3][3] = {{'1', '2', '3'}, {'4', '5', '6'}, {'7', '8', '9'}};
-    char currentPlayer;
-    int winner = ' ';
-
-    cout << "\033[35mWelcome to Tic-Tac-Toe!\033[0m" << endl;
-    cout << "\033[35mPlayers take turns entering a number (1-9) to place X or O.\033[0m" << endl;
-
+    char playAgain;
     do {
-        cout << "\033[38;5;208mWho starts 'X' or 'O'? \033[0m";
-        cin >> currentPlayer;
-        if (currentPlayer == 'X' || currentPlayer == 'x' || currentPlayer == 'O' || currentPlayer == 'o') {
-            currentPlayer = (currentPlayer == 'x') ? 'X' : (currentPlayer == 'o') ? 'O' : currentPlayer;
-            cout << "\033[32mPlayer " << currentPlayer << " starts!\n" << endl;
-            break;
-        } else {
-            cout << "\033[31mInvalid input! Enter 'X' or 'O'.\033[0m" << endl;
-            cin.clear();
-            cin.ignore(10000, '\n');
-        }
-    } while (true);
+        char board[3][3] = {{'1', '2', '3'}, {'4', '5', '6'}, {'7', '8', '9'}};
+        char currentPlayer;
+        char winner = ' ';
 
-    while (true) {
+        cout << "\033[35mWelcome to Tic-Tac-Toe!\033[0m" << endl;
+        cout << "\033[35mPlayers take turns entering a number (1-9) to place X or O.\033[0m\n" << endl;
+
+        do {
+            cout << "\033[38;5;208mWho starts 'X' or 'O'? \033[0m";
+            cin >> currentPlayer;
+            if (currentPlayer == 'X' || currentPlayer == 'x' || currentPlayer == 'O' || currentPlayer == 'o') {
+                currentPlayer = (currentPlayer == 'x') ? 'X' : (currentPlayer == 'o') ? 'O' : currentPlayer;
+                cout << "\033[32mPlayer " << currentPlayer << " starts!\n" << endl;
+                break;
+            } else {
+                cout << "\033[31mInvalid input! Enter 'X' or 'O'.\033[0m" << endl;
+                cin.clear();
+                cin.ignore(10000, '\n');
+            }
+        } while (true);
+
+        while (true) {
+            printBoard(board);
+            cout << "\033[38;5;208mPlayer " << currentPlayer << ", enter a number (1-9): \033[0m";
+            int move;
+            while (!(cin >> move) || !isValidMove(board, move)) {
+                cout << "\033[31mInvalid move! Choose an empty cell (1-9): \033[0m";
+                cin.clear();
+                cin.ignore(10000, '\n');
+            }
+
+            int row = (move - 1) / 3;
+            int col = (move - 1) % 3;
+            board[row][col] = currentPlayer;
+
+            winner = checkWinner(board);
+            if (winner != ' ') {
+                break;
+            }
+
+            currentPlayer = (currentPlayer == 'X') ? 'O' : 'X';
+        }
+
         printBoard(board);
-        cout << "\033[38;5;208mPlayer " << currentPlayer << ", enter a number (1-9): \033[0m";
-        int move;
-        while (!(cin >> move) || !isValidMove(board, move)) {
-            cout << "\033[31mInvalid move! Choose an empty cell (1-9): \033[0m";
-            cin.clear();
-            cin.ignore(10000, '\n');
+        if (winner == 'X' || winner == 'O') {
+            cout << "\033[32mPlayer " << winner << " wins!\033[0m" << endl;
+        } else if (winner == 'D') { 
+            cout << "\033[33mIt's a draw!\033[0m" << endl;
         }
 
-        int row = (move - 1) / 3;
-        int col = (move - 1) % 3;
-        board[row][col] = currentPlayer;
+        cout << "\033[36mPlay again? (y/n): \033[0m";
+        cin >> playAgain;
+        cin.clear();
+        cin.ignore(10000, '\n');
+    } while (playAgain == 'y' || playAgain == 'Y');
 
-        winner = checkWinner(board);
-        if (winner != ' ') {
-            break;
-        }
-
-        currentPlayer = (currentPlayer == 'X') ? 'O': 'X';
-    }
-
-    printBoard(board);
-    if (winner == 'X' || winner == 'O') {
-        cout << "\033[32mPlayer " << winner << " wins!\033[0m" << endl;
-    } else {
-        cout << "\033[33mIt's a draw!\033[0m" << endl;
-    }
-
+    cout << "\033[35mThanks for playing!\033[0m" << endl;
     return 0;
 }
