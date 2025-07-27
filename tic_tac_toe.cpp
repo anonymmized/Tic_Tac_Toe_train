@@ -60,6 +60,7 @@ char checkWinner(char board[3][3]) {
 
 int main() {
     char playAgain;
+    int scoreX = 0, scoreO = 0;  
     do {
         char board[3][3] = {{'1', '2', '3'}, {'4', '5', '6'}, {'7', '8', '9'}};
         char currentPlayer;
@@ -106,6 +107,11 @@ int main() {
 
         printBoard(board);
         if (winner == 'X' || winner == 'O') {
+            if (winner == 'X') {
+                scoreX++;
+            } else if (winner == 'O') {
+                scoreO++;
+            }
             cout << "\033[32mPlayer " << winner << " wins!\033[0m" << endl;
         } else if (winner == 'D') { 
             cout << "\033[33mIt's a draw!\033[0m" << endl;
@@ -116,7 +122,9 @@ int main() {
         cin.clear();
         cin.ignore(10000, '\n');
     } while (playAgain == 'y' || playAgain == 'Y');
-
+    cout << "\033[35mGames statistics:\033[0m" << endl;
+    cout << "\033[35mX wins: \033[0m" << scoreX << endl;
+    cout << "\033[35mO wins: \033[0m" << scoreO << endl;
     cout << "\033[35mThanks for playing!\033[0m" << endl;
     return 0;
 }
